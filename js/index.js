@@ -72,19 +72,19 @@ function table() {
     <p class="time">${'actinoids'}</p>`;
 }
 //相反数函数（为了实现切换时的旋转效果）
-function opposite(){
-    return (parseInt(Math.random()*6)-3)*360
+function opposite() {
+    return (parseInt(Math.random() * 6) - 3) * 360
 }
 //球体函数
 function ball() {
     //存放层数数据
     let level = [1, 6, 10, 15, 18, 20, 18, 15, 10, 6, 1];
-    let degX = 90+opposite();
+    let degX = 90 + opposite();
     let degY;
     let num = 0;
     //每层绕x旋转
     for (let i = 0; i < level.length; i++) {
-        degY = 0+opposite();
+        degY = 0 + opposite();
         for (let j = 0; j < level[i]; j++) {
             oLis[num].style.transform = ` rotateY(${degY}deg) rotateX(${degX}deg)  translateZ(900px) `;
             num++;
@@ -102,7 +102,7 @@ function roll() {
     let num = 0;
     //每层绕x旋转
     for (let i = 0; i < level.length; i++) {
-        degY = 0+opposite();
+        degY = 0 + opposite();
         for (let j = 0; j < level[i]; j++) {
             oLis[num].style.transform = ` rotateY(${degY}deg) translateY(${oTrsY}px)  translateZ(${144 * 40 / 3.1415 / 2}px) `;
             num++;
@@ -137,6 +137,8 @@ function roll() {
     //记录移动的距离
     let x_ = 0,
         y_ = 0;
+    //记录景深
+    let tz = -2000;
     document.onmousedown = function (ev) {
         x = ev.screenX;
         y = ev.screenY;
@@ -145,7 +147,7 @@ function roll() {
             y_ += (ev.screenY - y);
             stepX = ev.screenX - x;
             stepY = ev.screenY - y
-            oUl.style.transform = `translateZ(-2000px) rotateY(${x_ /10 }deg) rotateX(${-y_ /10}deg) `;
+            oUl.style.transform = `translateZ(${tz}px) rotateY(${x_ / 10}deg) rotateX(${-y_ / 10}deg) `;
             x = ev.screenX;
             y = ev.screenY;
         }
@@ -153,7 +155,7 @@ function roll() {
     document.onmouseup = function () {
         //这里要定义缓冲的动画，需要根据步长判断使用者鼠标滑动的速度，只有速度快的时候才提供缓冲
         //这里的判定要用||，有可能只动一个方向
-        if (Math.abs(stepY)  > 5 || Math.abs(stepX) > 5) {
+        if (Math.abs(stepY) > 5 || Math.abs(stepX) > 5) {
             ani()
         }
         document.onmousemove = null;
@@ -163,15 +165,31 @@ function roll() {
         let timeOut = setInterval(function () {
             stepX *= 0.9;
             stepY *= 0.9;
-            x_ = stepX  + x_;
-            y_ = stepY  + y_;
-            oUl.style.transform = `translateZ(-2000px) rotateY(${x_/10}deg) rotateX(${-y_ /10}deg) `;
+            x_ = stepX + x_;
+            y_ = stepY + y_;
+            oUl.style.transform = `translateZ(${tz}px) rotateY(${x_ / 10}deg) rotateX(${-y_ / 10}deg) `;
             //步长太小就不会动了，就结束
             //这里的判定要用&&，有可能只动一个方向
-            if (Math.abs(stepY)  < 0.1 && Math.abs(stepX) <0.1) {               
+            if (Math.abs(stepY) < 0.1 && Math.abs(stepX) < 0.1) {
                 clearInterval(timeOut)
-            }          
+            }
             //60帧
-        }, 16.6);      
+        }, 16.6);
     }
+    //滚轮效果
+    (function mouseRoll() {
+        document.onmousewheel = function (ev) {
+
+            if (ev.wheelDelta > 0) {
+                tz += 100;
+            } else {
+                tz -= 100;
+            }
+            oUl.style.transform = `translateZ(${tz}px) rotateY(${x_ / 10}deg) rotateX(${-y_ / 10}deg) `;
+
+            console.log(tz);
+
+        }
+    })();
 })();
+
