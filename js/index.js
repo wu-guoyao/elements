@@ -6,7 +6,7 @@ let oBtns = [table, roll, ball, grid]
 //定义所有的li
 let oLis;
 //定义鼠标是否移动过
-let isMove=false;
+let isMove = false;
 (function () {
     //创建125个li元素
     for (let i = 0; i < len; i++) {
@@ -152,7 +152,7 @@ function roll() {
             oUl.style.transform = `translateZ(${tz}px) rotateY(${x_ / 10}deg) rotateX(${-y_ / 10}deg) `;
             x = ev.screenX;
             y = ev.screenY;
-            isMove=true;
+            isMove = true;
         }
     };
     document.onmouseup = function () {
@@ -199,33 +199,51 @@ function roll() {
 //弹窗
 (function () {
     let oAlert = document.getElementById('alert'),
+        oAll = document.getElementById('all'),
         oTitle = oAlert.getElementsByClassName('title')[0].children[0],
         oImg = oAlert.getElementsByClassName('img')[0].children[0],
         oAuthor = oAlert.getElementsByClassName('author')[0].children[0],
-        oInfo = oAlert.getElementsByClassName('info')[0].children[0]; 
+        oInfo = oAlert.getElementsByClassName('info')[0].children[0];
+    let oTarget, index;
+    let back = document.getElementById("back");
     oUl.onclick = function (ev) {
-        ev = ev || window.ev;   
-        let index = ev.target.parentNode.index;
-        if (index == undefined||isMove==true ) {
-            isMove=false;
+        ev = ev || window.ev;
+        oTarget = ev.target.parentNode;
+        index = ev.target.parentNode.index;
+        if (index == undefined || isMove == true) {
+            isMove = false;
             return;
         } else {
             oTitle.innerHTML = `${date[index].title}`;
-            oImg.src = `./img/test.png`;
+            oImg.src = `./img/${date[index].author}.jpg`;
             oAuthor.innerHTML = `${date[index].author}`;
             oInfo.innerHTML = `${date[index].desc}`;
+            oAlert.style.transform = `rotateY(0deg) scale(2)`
             oAlert.style.display = 'block';
+
+            setTimeout(function () {
+                oAlert.style.opacity = 1;
+                oAlert.style.transform = `rotateY(0deg) scale(1)`
+            }, 0)
+
         }
         //阻止事件冒泡的IE兼容
-        ev.stopPropagation == undefined ? ev.cancelBubble = true : ev.stopPropagation();     
+        ev.stopPropagation == undefined ? ev.cancelBubble = true : ev.stopPropagation();
     }
     document.getElementById('all').onclick = function () {
-        oAlert.style.display = 'none';
+        oAlert.style.opacity = 0;
+        oAlert.style.transform = `rotateY(360deg) scale(0.1)`
+        setTimeout(function () {
+            oAlert.style.display = 'none'
+        }, 500)
+        // oAlert.style.display = 'none';
     }
-    oAlert.onclick=function(ev){
-        console.log(222);
-        ev.stopPropagation == undefined ? ev.cancelBubble = true : ev.stopPropagation();       
+    oAlert.onclick = function (ev) {
+        oAll.className = 'left';
+        document.getElementById('frame').src = `./src/3D Drag/index.html`
+        ev.stopPropagation == undefined ? ev.cancelBubble = true : ev.stopPropagation();
+    }
+    back.onclick = function () {
+        oAll.className = '';
     }
 })();
-
-
