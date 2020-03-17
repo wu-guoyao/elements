@@ -130,11 +130,15 @@ for(let i=0;i<str.length;i++){
 }
 for(let i=0;i<(tableDate.length/6);i++){
     let obj={
+        //1 H
         type: `${i+1} ${tableDate[i*6]}`,
+        //氢
         author: `${tableDate[i*6+1]}`,
         title: "我是氢，我最轻，火箭靠我运卫星",
-        desc: "这个H案例很酷",
+        desc: `这是${tableDate[i*6+1]}元素的详细介绍`,
+        //摩尔质量
         time: `${tableDate[i*6+3]}`,
+        //英文
         eglish:`${tableDate[i*6+2]}`,
         src: "3D Drag",
         img: `test`
@@ -143,6 +147,7 @@ for(let i=0;i<(tableDate.length/6);i++){
 }
 for(let i=103;i<118;i++){
     date[i].author=newData[i-103];
+    date[i].desc=`这是${newData[i-103]}元素的详细介绍`;
 }
 //记录每个元素的坐标
 let tableData=[

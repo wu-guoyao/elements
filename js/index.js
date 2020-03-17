@@ -5,6 +5,8 @@ let oUl = document.getElementById('list').firstElementChild;
 let oBtns = [table, roll, ball, grid]
 //定义所有的li
 let oLis;
+//定义鼠标是否移动过
+let isMove=false;
 (function () {
     //创建125个li元素
     for (let i = 0; i < len; i++) {
@@ -150,6 +152,7 @@ function roll() {
             oUl.style.transform = `translateZ(${tz}px) rotateY(${x_ / 10}deg) rotateX(${-y_ / 10}deg) `;
             x = ev.screenX;
             y = ev.screenY;
+            isMove=true;
         }
     };
     document.onmouseup = function () {
@@ -179,17 +182,50 @@ function roll() {
     //滚轮效果
     (function mouseRoll() {
         document.onmousewheel = function (ev) {
-
-            if (ev.wheelDelta > 0) {
-                tz += 100;
+            //浏览器兼容
+            if (document.onmousewheel === undefined) {
+                alert("请用chrome浏览器打开以查看效果")
             } else {
-                tz -= 100;
+                if (ev.wheelDelta > 0) {
+                    tz += 100;
+                } else {
+                    tz -= 100;
+                }
+                oUl.style.transform = `translateZ(${tz}px) rotateY(${x_ / 10}deg) rotateX(${-y_ / 10}deg) `;
             }
-            oUl.style.transform = `translateZ(${tz}px) rotateY(${x_ / 10}deg) rotateX(${-y_ / 10}deg) `;
-
-            console.log(tz);
-
         }
     })();
 })();
+//弹窗
+(function () {
+    let oAlert = document.getElementById('alert'),
+        oTitle = oAlert.getElementsByClassName('title')[0].children[0],
+        oImg = oAlert.getElementsByClassName('img')[0].children[0],
+        oAuthor = oAlert.getElementsByClassName('author')[0].children[0],
+        oInfo = oAlert.getElementsByClassName('info')[0].children[0]; 
+    oUl.onclick = function (ev) {
+        ev = ev || window.ev;   
+        let index = ev.target.parentNode.index;
+        if (index == undefined||isMove==true ) {
+            isMove=false;
+            return;
+        } else {
+            oTitle.innerHTML = `${date[index].title}`;
+            oImg.src = `./img/test.png`;
+            oAuthor.innerHTML = `${date[index].author}`;
+            oInfo.innerHTML = `${date[index].desc}`;
+            oAlert.style.display = 'block';
+        }
+        //阻止事件冒泡的IE兼容
+        ev.stopPropagation == undefined ? ev.cancelBubble = true : ev.stopPropagation();     
+    }
+    document.getElementById('all').onclick = function () {
+        oAlert.style.display = 'none';
+    }
+    oAlert.onclick=function(ev){
+        console.log(222);
+        ev.stopPropagation == undefined ? ev.cancelBubble = true : ev.stopPropagation();       
+    }
+})();
+
 
