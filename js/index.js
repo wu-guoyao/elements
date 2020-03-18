@@ -3,11 +3,11 @@ let len = 5 * 5 * 5 - 5;
 let oUl = document.getElementById('list').firstElementChild;
 //定义存放按钮的数组
 let oBtns = [table, roll, ball, grid]
-//定义所有的li
+    //定义所有的li
 let oLis;
 //定义鼠标是否移动过
 let isMove = false;
-(function () {
+(function() {
     //创建125个li元素
     for (let i = 0; i < len; i++) {
         //没有数据就默认等于第一个数据
@@ -115,22 +115,58 @@ function roll() {
     }
 }
 //定义切换按钮
-(function () {
+(function() {
+    let oUlBtn = document.getElementById('btn').children[0];
     let oBtn = document.getElementById('btn').children[0].children;
     let index = 0;
     oBtn[index].style.background = 'rgba(0, 127, 127, 0.8)';
+    let time,
+        _Time = 0;
+    let isauto = true;
     for (let i = 0; i < oBtn.length; i++) {
         // oBtn[i].style.background = 'null'
-        oBtn[i].onclick = function () {
+        oBtn[i].onclick = function() {
             oBtn[index].style.background = '';
             index = i;
             oBtns[i]();
             oBtn[i].style.background = 'rgba(0, 127, 127, 0.8)';
         };
     }
+    //以下这些代码是重点了，自动轮播切换实现，监听鼠标事件，只要鼠标一动自动轮播停止，然后监听鼠标静止时间，时间超过
+    // 五秒钟接着进行轮播。
+    setTimeout(() => {
+        time = setInterval(function() {
+            oBtn[index].style.background = '';
+            index++;
+            if (index > 3) { index = 0 };
+            oBtns[index]();
+            oBtn[index].style.background = 'rgba(0, 127, 127, 0.8)';
+        }, 5000);
+    }, 3500);
+    window.onmousemove = function() {
+        window.oLastTime = new Date().getTime();
+        clearInterval(time);
+        isauto = false;
+    }
+    setInterval(() => {
+        window.oLastTime = window.oLastTime || 0;
+        let newTime = new Date().getTime();
+        _Time = newTime - window.oLastTime;
+        if (_Time > 3000 && isauto == false) {
+            time = setInterval(function() {
+                console.log(222);
+                oBtn[index].style.background = '';
+                index++;
+                if (index > 3) { index = 0 };
+                oBtns[index]();
+                oBtn[index].style.background = 'rgba(0, 127, 127, 0.8)';
+            }, 5000);
+            isauto = true;
+        }
+    }, 1000);
 })();
 //鼠标拖拽效果
-(function () {
+(function() {
     //记录按下时的位置
     let x, y;
     //记录最后的步长
@@ -141,10 +177,10 @@ function roll() {
         y_ = 0;
     //记录景深
     let tz = -2000;
-    document.onmousedown = function (ev) {
+    document.onmousedown = function(ev) {
         x = ev.screenX;
         y = ev.screenY;
-        document.onmousemove = function (ev) {
+        document.onmousemove = function(ev) {
             x_ += (ev.screenX - x);
             y_ += (ev.screenY - y);
             stepX = ev.screenX - x;
@@ -155,7 +191,7 @@ function roll() {
             isMove = true;
         }
     };
-    document.onmouseup = function () {
+    document.onmouseup = function() {
         //这里要定义缓冲的动画，需要根据步长判断使用者鼠标滑动的速度，只有速度快的时候才提供缓冲
         //这里的判定要用||，有可能只动一个方向
         if (Math.abs(stepY) > 5 || Math.abs(stepX) > 5) {
@@ -165,7 +201,7 @@ function roll() {
     };
     //缓冲动画，这里用定时器来做
     function ani() {
-        let timeOut = setInterval(function () {
+        let timeOut = setInterval(function() {
             stepX *= 0.9;
             stepY *= 0.9;
             x_ = stepX + x_;
@@ -181,7 +217,7 @@ function roll() {
     }
     //滚轮效果
     (function mouseRoll() {
-        document.onmousewheel = function (ev) {
+        document.onmousewheel = function(ev) {
             //浏览器兼容
             if (document.onmousewheel === undefined) {
                 alert("请用chrome浏览器打开以查看效果")
@@ -197,7 +233,7 @@ function roll() {
     })();
 })();
 //弹窗
-(function () {
+(function() {
     let oAlert = document.getElementById('alert'),
         oAll = document.getElementById('all'),
         oTitle = oAlert.getElementsByClassName('title')[0].children[0],
@@ -205,8 +241,11 @@ function roll() {
         oAuthor = oAlert.getElementsByClassName('author')[0].children[0],
         oInfo = oAlert.getElementsByClassName('info')[0].children[0];
     let oTarget, index;
+    let isAlert = false;
     let back = document.getElementById("back");
-    oUl.onclick = function (ev) {
+    //定义数组，用来存放当前li的transform3d信息
+    let oTransform3d = [];
+    oUl.onclick = function(ev) {
         ev = ev || window.ev;
         oTarget = ev.target.parentNode;
         index = ev.target.parentNode.index;
@@ -220,8 +259,9 @@ function roll() {
             oInfo.innerHTML = `${date[index].desc}`;
             oAlert.style.transform = `rotateY(0deg) scale(2)`
             oAlert.style.display = 'block';
+            isAlert = true;
 
-            setTimeout(function () {
+            setTimeout(function() {
                 oAlert.style.opacity = 1;
                 oAlert.style.transform = `rotateY(0deg) scale(1)`
             }, 0)
@@ -230,20 +270,27 @@ function roll() {
         //阻止事件冒泡的IE兼容
         ev.stopPropagation == undefined ? ev.cancelBubble = true : ev.stopPropagation();
     }
-    document.getElementById('all').onclick = function () {
-        oAlert.style.opacity = 0;
-        oAlert.style.transform = `rotateY(360deg) scale(0.1)`
-        setTimeout(function () {
-            oAlert.style.display = 'none'
-        }, 500)
+    document.getElementById('all').onclick = function() {
+        if (isAlert = false) {
+            return
+        } else {
+            oAlert.style.opacity = 0;
+            oAlert.style.transform = `rotateY(360deg) scale(0.1)`
+            setTimeout(function() {
+                oAlert.style.display = 'none'
+            }, 500)
+        }
+
         // oAlert.style.display = 'none';
     }
-    oAlert.onclick = function (ev) {
+    oAlert.onclick = function(ev) {
         oAll.className = 'left';
         document.getElementById('frame').src = `./src/3D Drag/index.html`
         ev.stopPropagation == undefined ? ev.cancelBubble = true : ev.stopPropagation();
     }
-    back.onclick = function () {
+    back.onclick = function() {
         oAll.className = '';
     }
+
+
 })();

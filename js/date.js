@@ -134,8 +134,8 @@ for(let i=0;i<(tableDate.length/6);i++){
         type: `${i+1} ${tableDate[i*6]}`,
         //氢
         author: `${tableDate[i*6+1]}`,
-        title: "我是氢，我最轻，火箭靠我运卫星",
-        desc: `这是${tableDate[i*6+1]}元素的详细介绍`,
+        title: "我是氢，我最轻，火箭靠我运卫星()",
+        desc: `这是${tableDate[i*6+1]}元素的详细介绍（测试版，更多素材信息未添加，后续对应添加素材即可）`,
         //摩尔质量
         time: `${tableDate[i*6+3]}`,
         //英文

@@ -1,60 +1,128 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Document</title>
     <style>
-        #container {
-            width: 400px;
-            height: 400px;
-            background-color: black;
-            position: absolute;
-            z-index: -30;
+        * {
+            margin: 0;
+            padding: 0;
+            list-style: none;
         }
-
-        #a1 {
-            position: absolute;
-            top: 100px;
-            left: 210px;
-            width: 200px;
-            height: 200px;
-            background-color: yellow;
-            /* z-index: 6; */
+        
+        .box {
+            margin: 100px;
         }
-/* 
-        #a2 {
-            position: absolute;
-            top: 50px;
-            left: 160px;
-            width: 200px;
-            height: 200px;
-            background-color: green;
-            z-index: 10;
+        
+        li {
+            position: relative;
+            float: left;
+            width: 50px;
+            height: 50px;
+            margin-right: 100px;
         }
-        #a3 {
+        
+        span {
+            width: 100px;
+            height: 100px;
+            margin: 12px;
+            display: block;
+            border-radius: 50%;
+            background: -webkit-linear-gradient(red, blue);
+            transition: 1s all ease;
+        }
+        
+        li:hover span {
+            transform: rotateZ(360deg);
+        }
+        
+        @keyframes warn {
+            0% {
+                transform: scale(1);
+                opacity: 0.8;
+            }
+            20% {
+                transform: scale(1);
+                opacity: 0.6;
+            }
+            40% {
+                transform: scale(1.2);
+                opacity: 0.4;
+            }
+            60% {
+                transform: scale(1.4);
+                opacity: 0.2;
+            }
+            80% {
+                transform: scale(1.6);
+                opacity: 0.1;
+            }
+            100% {
+                transform: scale(1.8);
+                opacity: 0.0;
+            }
+        }
+        
+        a:before {
+            border: 12px solid #A8E957;
+            content: '';
             position: absolute;
-            top: 25px;
-            left: 80px;
-            width: 200px;
-            height: 200px;
-            background-color: pink;
-            z-index: 5;
-        } */
+            width: 100px;
+            height: 100px;
+            border-radius: 62px;
+            opacity: 0;
+        }
+        
+        li:hover a:before {
+            animation: warn 1s ease-out infinite;
+        }
     </style>
 </head>
 
 <body>
-        <!-- <div id="a1">a1在上面</div>
-        <div id="a3">a3在上面</div> -->
-    <div id="container">
-        <div id="a1">a1在上面</div>
-        <!-- <div id="a3">a3在上面</div> -->
+    <div class="box">
+        <ul>
+            <li>
+                <a href="#">
+                    <span></span>
+                </a>
+            </li>
+            <li>
+                <a href="#">
+                    <span></span>
+                </a>
+            </li>
+            <li>
+                <a href="#">
+                    <span></span>
+                </a>
+            </li>
+            <li>
+                <a href="#">
+                    <span></span>
+                </a>
+            </li>
+        </ul>
+
     </div>
-    <!-- <div id="a2">a2在下边</div> -->
-    <script src="./js/caogao.js"></script>
+
 </body>
 
 </html>
+
+<!-- oUl.onmouseover = function(ev) {
+    oTransform3d = ev.target.parentNode.style.transform.match(/\d+|-\d+/g);
+    oTransform3d.shift();
+    ev.target.parentNode.style.transform = `translate3d(${oTransform3d[0]}px,${oTransform3d[1]}px,0px) scale(1.6)`
+
+    console.log(oTransform3d);
+    ev.target.parentNode.onmouseleave = function() {
+        console.log(this);
+
+        // oTransform3d = ev.target.parentNode.style.transform.match(/\d+|-\d+/g);
+        // oTransform3d.shift();
+        ev.target.parentNode.style.transform = `translate3d(${oTransform3d[0]}px,${oTransform3d[1]}px,0px) scale(1)`
+    }
+
+} -->
